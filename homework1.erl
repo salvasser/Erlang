@@ -8,6 +8,8 @@ get_data() ->
 	io:fwrite("Your name is ~s~n", [Name]),
 	io:fwrite("Your email is ~s~n", [Email]).
 
+%
+%
 % function that demonstrates the computation error	
 test() ->
 	io:fwrite("two to the power of a thousand in erlang:~n ~w~n", [math:pow(2,1000)]),
