@@ -2,7 +2,7 @@
 -export ([read/1]).
 
 
-%	given 'hello.dat' as an arument 
+%	given 'hello.dat' as an argument 
 read(Filename) ->
 	
 	Touple = file:read_file(Filename),
