@@ -1,0 +1,9 @@
+2>  c(fibonacci).
+{ok,fibonacci}
+3> timer:tc(fibonacci, fib, [20]).
+{1025,6765}
+4>  c(fibonacci, [native]).       
+{ok,fibonacci}
+5> timer:tc(fibonacci, fib, [20]).
+{231,6765}
+
