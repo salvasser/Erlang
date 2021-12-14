@@ -20,27 +20,18 @@ server(Port) ->
 	client(ListenSocket).
 	
 
+user_handler(Msg) ->
 
-user_handler(Msg)->
-	S = string:tokens(binary_to_list(Msg), "\r\n\, "),
-	case lists:member("/index1", S) of
-		true -> "index1.html";
-		false -> begin
-				case lists:member("/index2", S) of
-					true -> "index2.html";
-					false -> begin
-							case lists:member("/index3", S) of
-								true -> "index3.html";
-								false -> "start_page.html"
-							end
-						end
-				end
-			end
-	end.
-
-%	if (lists:member("/index1", S)) == true -> "index1.html"
-%		(lists:member("/index1", S)) =:= false -> "start_page.html"
-%	end.
+	List_text = ["/index1", "/index2", "/index3"],
+	List_index = ["index1.html", "index2.html", "index3.html"],
+	user_handler(Msg, List_index, List_text).
+	
+	user_handler(_Msg, _List_text []) -> "start_page.html";
+	user_handler(Msg, [H_index|T_index] [H_text|T_text]) -> 
+		case lists:member(H_text, string:tokens(binary_to_list(Msg), "\r\n\, ")) of
+			true -> H_index;
+			false -> user_handler(Msg, T_index, T_text)
+		end.
 
 
 read_file(Msg)-> 
