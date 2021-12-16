@@ -24,13 +24,14 @@ user_handler(Msg) ->
 
 	List_text = ["/index1", "/index2", "/index3"],
 	List_index = ["index1.html", "index2.html", "index3.html"],
-	user_handler(Msg, List_index, List_text).
+	List_data = string:tokens(binary_to_list(Msg), "\r\n\, "),
+	user_handler(List_data, List_index, List_text).
 	
-	user_handler(_Msg, _List_text, []) -> "start_page.html";
-	user_handler(Msg, [H_index|T_index], [H_text|T_text]) -> 
-		case lists:member(H_text, string:tokens(binary_to_list(Msg), "\r\n\, ")) of
+	user_handler(_List_data, _List_text, []) -> "start_page.html";
+	user_handler(List_data, [H_index|T_index], [H_text|T_text]) -> 
+		case lists:member(H_text, List_data) of
 			true -> H_index;
-			false -> user_handler(Msg, T_index, T_text)
+			false -> user_handler(List_data, T_index, T_text)
 		end.
 
 
