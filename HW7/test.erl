@@ -1,5 +1,5 @@
 -module(test).
--export([server/1]).
+-export([server/1, receive_server/0, transmit/1]).
 
 client_next(ClientSocket) ->
 	{ok, Msg} = gen_tcp:recv(ClientSocket, 0),
@@ -39,6 +39,18 @@ read_file(Msg)->
 	{ok, Data} = file:read_file(user_handler(Msg)),
 	Data.
 	%erlang:binary_to_list(Data).
+
+receive_server() ->
+	
+	receive
+		{_Pid, Port} when is_integer(Port) -> server(Port)
+	after 10000 -> timeout
+	end.
+	
+transmit(Port) ->
+	Node_name = 'receive6@aleksandr-VirtualBox',
+	net_adm:ping(Node_name),
+	{server, Node_name} ! {self(), Port}.
 
 	
 %	Response = "HTTP/1.1 200 OK

@@ -30,7 +30,6 @@ receive_server() ->
 			Data_user = find_user(Msg),
 			Pid ! Data_user;
 			%receive_server();	this not work
-		{_Pid, Msg} when Msg == stop -> ending_program;
 		{Pid, _} -> Pid ! error
 	after 10000 -> timeout
 	end.
@@ -43,7 +42,7 @@ transmit(Id) ->
 	{server, Node_name} ! {self(), Id},
 	
 	receive
-		Msg when Msg == error -> 'There is no such id in the database';
+		error -> 'There is no such id in the database';
 		Msg -> io:format("Name: ~p~nPhone: ~p~nAge: ~p~n", [Msg#person.name, Msg#person.phone, Msg#person.age])
 	after 10000 -> timeout
 	end.
