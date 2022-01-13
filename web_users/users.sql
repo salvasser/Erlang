@@ -9,7 +9,7 @@ create table users2 (
 );
 
 insert into users2 (id, fio, phone, age) values ('1', 'Jonh', 1115, 25),
-												('2', 'Kevin', 1785, 18),
+						('2', 'Kevin', 1785, 18),
                                                 ('3', 'Nora', 4695, 36),
                                                 ('4', 'David', 3964, 40),
                                                 ('5', 'Fiona', 9358, 15),

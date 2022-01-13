@@ -1,6 +1,17 @@
 -module(server).
 -export([server/0]).
 
+%%!!!!!!!!!!!!
+%%Before you start working with the application, you need to execute the following queries in sql:
+
+%%	CREATE DATABASE erlang;
+%%	USE erlang;
+
+%%if you run the program again, then execute in sql:
+
+%%	DROP TABLE users;
+%%!!!!!!!!!!!!
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%server part
 client_next(ClientSocket) ->
@@ -20,13 +31,13 @@ client(ServerSocket) ->
 
 server() ->
 	sql_start(),
-	{ok, ListenSocket} = gen_tcp:listen(8070, [binary, {active, false},{reuseaddr, true}]),
+	{ok, ListenSocket} = gen_tcp:listen(8076, [binary, {active, false},{reuseaddr, true}]), %%localhost:8076
 	client(ListenSocket).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%this function processes the user's request	
 handler(Msg) ->
 	List_text = ["get-users", "get-user", "delete-user", "add-user"],
-	[_Unused, Request, _Id | _Tail] = splitting(Msg),
+	[_Unused, Request, _Id | _Tail] = splitting(Msg),	
 	handler(Request, List_text).
 	
 	handler(_Request, []) -> "start-page";
@@ -42,30 +53,25 @@ web_data("start-page", _Msg, _All_id) ->
 	Data;
 web_data("get-users", Msg, _All_id) -> 
 	[Term, Age] = find_number(Msg),
-	%io:format("~p~n", [Var]),
-	case (Term == "younger") or (Term == "older") of
-		true -> case Term == "younger" of
-				true -> "<h1>User data</h1><br>" ++ "<table>" ++ output(younger_than(Age)) ++ "</table>";
-				false -> "<h1>User data</h1><br>" ++ "<table>" ++ output(older_than(Age)) ++ "</table>"
-			end;
-		false -> "<h1>User data</h1><br>" ++ "<table>" ++ output(all_users()) ++ "</table>"
+	if
+		Term == "younger" -> "<h1>User data</h1><br>" ++ "<table>" ++ output(younger_than(Age)) ++ "</table>";
+		Term == "older" -> "<h1>User data</h1><br>" ++ "<table>" ++ output(older_than(Age)) ++ "</table>";
+		true -> "<h1>User data</h1><br>" ++ "<table>" ++ output(all_users()) ++ "</table>"
 	end;
-	
-	%"<h1>User data</h1><br>" ++ "<table>" ++ output(all_users()) ++ "</table>";
 web_data("get-user", Msg, All_id) -> 
-	[_Term, ID] = find_number(Msg),
+	[Term, ID] = find_number(Msg),
 	Number = checkup_id(All_id, ID),
-	case Number == missing of
-		true -> "<h3>There is no user with this ID, check the data<h3>";
-		false -> "<h1>User " ++ integer_to_list(Number) ++ " data</h1><br>" ++ "<table>" ++ output(one_user_id(Number)) ++ "</table>"
+	case (not(Number == missing)) and (Term == "id") of
+		true -> "<h1>User " ++ integer_to_list(Number) ++ " data</h1><br>" ++ "<table>" ++ output(one_user_id(Number)) ++ "</table>";
+		false -> "<h3>There is no user with this ID, check the data<h3>"
 	end;
 web_data("delete-user", Msg, All_id) -> 
-	[_Term, ID] = find_number(Msg),
+	[Term, ID] = find_number(Msg),
 	Number = checkup_id(All_id, ID),
-	case Number == missing of
-		true -> "<h3>There is no user with this ID, check the data<h3>";
-		false -> delete_user(Number),
-			"<h1>Removing a user</h1><br><p>user " ++ integer_to_list(Number) ++ " deleted</p>"
+	case (not(Number == missing)) and (Term == "id") of
+		true -> delete_user(Number),
+			"<h1>Removing a user</h1><br><p>user " ++ integer_to_list(Number) ++ " deleted</p>";
+		false -> "<h3>There is no user with this ID, check the data<h3>"
 	end;
 web_data("add-user", _Msg, All_id) -> 
 	add_user(All_id).
@@ -74,25 +80,30 @@ web_data("add-user", _Msg, All_id) ->
 %%working with a database
 sql_start() ->
 	{ok, Pid} = mysql:start_link([{host, "localhost"}, {user, "aleksandr"}, {password, "password"}, {database, "erlang"}]),
-	true = erlang:register(db, Pid).
+	true = erlang:register(db, Pid),
+	existing_users().
 
+existing_users() ->
+	mysql:query(db, <<"CREATE TABLE users (id VARCHAR(4), first_name VARCHAR(255), phone VARCHAR(4), age INT)">>),
+	mysql:query(db, <<"INSERT INTO users (id, first_name, phone, age) VALUES ('1','Jonh','1115',25), ('2','Kevin','1785',18), ('3', 'Nora', 4695, 36), ('4', 'David', 3964, 40), ('5', 'Fiona', 9358, 15), ('6', 'Andrew', 2574, 60), ('7', 'Lisa', 7563, 34), ('8', 'Stanly', 2745, 51), ('9', 'Sara', 4833, 12), ('10', 'Dash', 7866, 22)">>).
+	
 id_list() ->
-	{ok, _Key, All_id} = mysql:query(db, <<"SELECT id FROM users2">>),
+	{ok, _Key, All_id} = mysql:query(db, <<"SELECT id FROM users">>),
 	make_list(All_id, []).
 	
 			make_list([], Acc) -> Acc;
 			make_list([H_id | T_id], Acc) -> make_list(T_id, [binary_to_list(list_to_binary(H_id)) | Acc]).
 
 all_users() ->
-	{ok, _Key, Data} = mysql:query(db, <<"SELECT * FROM users2">>),
+	{ok, _Key, Data} = mysql:query(db, <<"SELECT * FROM users">>),
 	Data.
 
 one_user_id(Number_id) ->
-	{ok, _Key, [User_data]} = mysql:query(db, <<"SELECT * FROM users2 WHERE id = ?">>, [Number_id]),
+	{ok, _Key, [User_data]} = mysql:query(db, <<"SELECT * FROM users WHERE id = ?">>, [Number_id]),
 	[User_data].
 
 delete_user(Number_id) ->
-	mysql:query(db, <<"DELETE FROM users2 WHERE id = ?">>, [Number_id]).
+	mysql:query(db, <<"DELETE FROM users WHERE id = ?">>, [Number_id]).
 	
 add_user(All_id) ->
 	{ok, [ID]} = io:fread("Enter ID: ", "~s"),
@@ -101,24 +112,24 @@ add_user(All_id) ->
 	{ok, [Age]} = io:fread("Enter Age: ", "~d"),
 	Number = checkup_id(All_id, ID),
 	case Number == missing of
-		true -> mysql:query(db, <<"INSERT INTO users2 (id, fio, phone, age) VALUES (?,?,?,?)">>, [ID, Name, Phone, Age]),
+		true -> mysql:query(db, <<"INSERT INTO users (id, first_name, phone, age) VALUES (?,?,?,?)">>, [ID, Name, Phone, Age]),
 			"<h3>User added</h3>";
 		false -> "<h3>Error adding. User with this ID already exists</h3>"
 	end.
 	
 younger_than(Age) ->
-	{ok, _Key, User_data} = mysql:query(db, <<"SELECT * FROM users2 WHERE age < ?">>, [Age]),
+	{ok, _Key, User_data} = mysql:query(db, <<"SELECT * FROM users WHERE age < ?">>, [Age]),
 	User_data.
 	
 older_than(Age) ->
-	{ok, _Key, User_data} = mysql:query(db, <<"SELECT * FROM users2 WHERE age > ?">>, [Age]),
+	{ok, _Key, User_data} = mysql:query(db, <<"SELECT * FROM users WHERE age > ?">>, [Age]),
 	User_data.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%this function gets a number from a request
 find_number(Msg) ->
 	[_Unused, _Request, Number_text | _Tail] = splitting(Msg),
 	List = string:lexemes(Number_text, "-"),
-	case length(List) == 2 of
+	case length(List) == 2 of	%checking the request in the form !"Term-Number"!
 		true -> List;
 		false -> [error, ""]
 	end.
