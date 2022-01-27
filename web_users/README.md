@@ -14,6 +14,7 @@ or use bash-script "start_script" in "resources" folder.
 
 ------------------------------------------------
 if you run the program again, then execute:
+------------------------------------------------
 
 	server:clear_data();		(DROP TABLE users) in sql
 	
