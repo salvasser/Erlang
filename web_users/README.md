@@ -8,8 +8,7 @@ Before you start working with the application, you need to execute the following
 
 	CREATE DATABASE erlang;
 	USE erlang;
-	
-------------------------------------------------	
+		
 or use bash-script "start_script" in "resources" folder.
 
 ------------------------------------------------
