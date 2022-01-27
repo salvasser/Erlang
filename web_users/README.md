@@ -23,6 +23,7 @@ then restart the erlang virtual machine.
 ------------------------------------------------
 to run the application, run "server:server()" in the terminal
 enter in the address bar of the browser
+------------------------------------------------
 
 	localhost:8070.
 ------------------------------------------------
