@@ -135,7 +135,7 @@ find_number(Msg, Query) ->
 	ListOfText = splitting(Msg),
 	find_number(ListOfText, Query, []).
 	
-	find_number([Head1, Head2 | Tail], Query, Acc) -> if 
+		find_number([Head1, Head2 | Tail], Query, Acc) -> if 
 							Head1 /= Query -> find_number ([Head2 | Tail], Query, Acc);
 							Head1 == Query -> 
 									List = string:lexemes(Head2, "-"),
