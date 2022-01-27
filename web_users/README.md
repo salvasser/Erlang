@@ -8,12 +8,12 @@ Before you start working with the application, you need to execute the following
 
 	CREATE DATABASE erlang;
 	USE erlang;
-
 or use bash-script "start_script" in "resources" folder.
 ------------------------------------------------
 if you run the program again, then execute:
 
 	server:clear_data();		(DROP TABLE users) in sql
+	
 then restart the erlang virtual machine.
 ------------------------------------------------
 to run the application, run "server:server()" in the terminal
