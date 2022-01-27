@@ -18,7 +18,6 @@ if you run the program again, then execute:
 
 	server:clear_data();		(DROP TABLE users) in sql
 	
-------------------------------------------------	
 then restart the erlang virtual machine.
 
 ------------------------------------------------
