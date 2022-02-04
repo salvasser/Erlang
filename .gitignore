@@ -4,6 +4,8 @@
 *.plt
 erl_crash.dump
 .concrete/DEV_MODE
+*.save
+*.lock
 
 # rebar 2.x
 .rebar
