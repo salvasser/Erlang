@@ -5,11 +5,14 @@ There is user data here: their id, name, age and phone number.
 You can display the data of all users at once, display the data of one user by his ID, display the data of users older or younger than a certain age, as well as delete and add users.
 
 ------------------------------------------------
-to run the application, run in the terminal
+to run the application, execute in the terminal:
 ------------------------------------------------ 
+
 docker-compose up -d
-docker exec -it erl /bin/bash
-rebar3 compile && rebar3 shell
+------------------------------------------------
+
+docker exec -it erl /bin/bash\n
+rebar3 compile && rebar3 shell\n
 server:server().
 ------------------------------------------------
 enter in the address bar of the browser
@@ -20,7 +23,7 @@ enter in the address bar of the browser
 if you run the program again, then execute:
 ------------------------------------------------
 
-	server:clear_data();		in container
+	server:clear_data().		in container
 	
 then restart the erlang virtual machine.
 ------------------------------------------------
