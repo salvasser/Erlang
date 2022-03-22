@@ -8,9 +8,9 @@ You can display the data of all users at once, display the data of one user by h
 to run the application, execute in the terminal:
 ------------------------------------------------ 
 
-	docker-compose up -d\n
-	docker exec -it erl /bin/bash\n
-	rebar3 compile && rebar3 shell\n
+	docker-compose up -d
+	docker exec -it erl /bin/bash
+	rebar3 compile && rebar3 shell
 	server:server().
 ------------------------------------------------
 enter in the address bar of the browser
@@ -18,10 +18,10 @@ enter in the address bar of the browser
 
 	localhost:8071.
 ------------------------------------------------
-if you run the program again, then execute:
+if you run the program again, then execute in virtual machine erlang container:
 ------------------------------------------------
 
-	server:clear_data().		in virtual machine erlang container
+	server:clear_data().
 	
 then restart the erlang virtual machine.
 ------------------------------------------------
