@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+
+  db:
+    image: mysql
+    container_name: sql
+    environment:
+      #MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: erlang
+    ports:
+      - 3305:3306
+
+  app:
+    tty: true
+    image: salvasser/webusers
+    container_name: erl
+    ports:
+      - 8071:8071
+    environment:
+      MYSQL_HOST: db
+    links:
+      - db
+
+
+
+

@@ -72,12 +72,12 @@ web_data("add-user", _Msg, AllId) ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%working with a database
 sql_start() ->
-	{ok, Pid} = mysql:start_link([{host, "localhost"}, {user, "aleksandr"}, {password, "DLEta3y!"}, {database, "erlang"}]),
+	{ok, Pid} = mysql:start_link([{host, "db"}, {user, "root"}, {password, "123456"}, {database, "erlang"}]),
 	true = erlang:register(db, Pid),
 	existing_users().
 
 existing_users() ->
-	mysql:query(db, <<"CREATE TABLE users (id VARCHAR(4), first_name VARCHAR(255), phone VARCHAR(4), age INT)">>),
+	mysql:query(db, <<"CREATE TABLE IF NOT EXISTS users (id VARCHAR(4), first_name VARCHAR(255), phone VARCHAR(4), age INT)">>),
 	{ok, Data} = file:read_file("resources/users.dat"),
 	ListOfData = string:tokens(binary_to_list(Data), "\r\n\,\ "),
 	read(ListOfData).
@@ -113,7 +113,7 @@ add_user(AllId) ->
 	{ok, [Age]} = io:fread("Enter Age: ", "~d"),
 	Number = checkup_id(AllId, ID),
 	case Number == missing of
-		true -> mysql:query(db, <<"INSERT INTO users (id, first_name, phone, age) VALUES (?,?,?,?)">>, [ID, Name, Phone, Age]),
+		true -> mysql:query(db, <<"INSERT INTO users (id, name, phone, age) VALUES (?,?,?,?)">>, [ID, Name, Phone, Age]),
 			"<h3>User added</h3>";
 		false -> "<h3>Error adding. User with this ID already exists</h3>"
 	end.
@@ -136,14 +136,14 @@ find_number(Msg, Query) ->
 	find_number(ListOfText, Query, []).
 	
 		find_number([Head1, Head2 | Tail], Query, Acc) -> if 
-							Head1 /= Query -> find_number ([Head2 | Tail], Query, Acc);
-							Head1 == Query -> 
-									List = string:lexemes(Head2, "-"),
-									case length(List) == 2 of	%checking the request in the form !"Term-Number"!
-										true -> List;
-										false -> [error, ""]
-									end
-							end.
+			Head1 /= Query -> find_number ([Head2 | Tail], Query, Acc);
+			Head1 == Query -> 
+				List = string:lexemes(Head2, "-"),
+				case length(List) == 2 of	%checking the request in the form !"Term-Number"!
+					true -> List;
+					false -> [error, ""]
+				end
+		end.
 %%checking for the existence of an ID
 checkup_id(AllId, Id) ->
 	case lists:member(Id, AllId) of
