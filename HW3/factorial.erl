@@ -1,11 +1,21 @@
 #!/usr/bin/env escript
+%% -*- erlang -*-
+%%! -sname factorial -mnesia debug verbose
 main([String]) ->
-  N = list_to_integer(String),
-  F = fac(N, 1),
-  io:format("factorial ~w = ~w\n", [N,F]);
-
+    try
+        N = list_to_integer(String),
+        F = fac(N),
+        io:format("factorial ~w = ~w\n", [N,F])
+    catch
+        _:_ ->
+            usage()
+    end;
 main(_) ->
-  halt(1).
+    usage().
 
-fac(0, Acc) -> Acc;
-fac(N, Acc) when N > 0 -> fac(N-1, N*Acc).
+usage() ->
+    io:format("usage: factorial integer\n"),
+    halt(1).
+
+fac(0) -> 1;
+fac(N) -> N * fac(N-1).
