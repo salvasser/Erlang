@@ -1,4 +1,4 @@
-FROM erlang:26
+FROM erlang:26-alpine
 
 COPY HW3/factorial.erl factorial.erl
 RUN chmod +x factorial.erl
