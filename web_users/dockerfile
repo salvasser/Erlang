@@ -3,3 +3,5 @@ FROM erlang
 WORKDIR app
 
 COPY . .
+
+CMD /bin/bash
