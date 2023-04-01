@@ -1,5 +1,5 @@
 FROM erlang:26
 
 WORKDIR app
-COPY . .
+COPY web_users .
 CMD /bin/bash
