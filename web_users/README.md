@@ -7,11 +7,13 @@ You can display the data of all users at once, display the data of one user by h
 ------------------------------------------------
 to run the application, execute in the terminal:
 ------------------------------------------------ 
-
-	docker-compose up -d
-	docker exec -it erl /bin/bash
-	rebar3 compile && rebar3 shell
-	server:server().
+## there are two options:
+ 1. Via docker compose
+	1.1. docker-compose up -d
+	1.2. docker exec -it erl /bin/bash
+	1.3. rebar3 compile && rebar3 shell
+	1.4. server:server().
+ 2. Via docker network
 ------------------------------------------------
 enter in the address bar of the browser
 ------------------------------------------------
