@@ -25,7 +25,7 @@ to run the application, execute in the terminal:
 enter in the address bar of the browser
 ------------------------------------------------
 
-	localhost:8071.
+	localhost:8071
 ------------------------------------------------
 if you run the program again, then execute in virtual machine erlang container:
 ------------------------------------------------
