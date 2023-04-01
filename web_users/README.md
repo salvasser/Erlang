@@ -9,7 +9,7 @@ to run the application, execute in the terminal:
 ------------------------------------------------ 
 ## there are two options:
  1. Via docker compose
-	1.1. docker-compose up -d
+	1.1. docker-compose up -d \n
 	1.2. docker exec -it erl /bin/bash
 	1.3. rebar3 compile && rebar3 shell
 	1.4. server:server().
