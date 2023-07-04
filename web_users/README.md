@@ -22,13 +22,27 @@ to run the application, execute in the terminal:
     server:server().
     ~~~
  2. Via docker network
-    - `docker image build -t webusers:1 -f Dockerfile.webusers https://github.com/salvasser/Erlang.git#main`
-    - `docker network create web-app`
-    - `docker run -d --network web-app --network-alias db -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=erlang mysql:8.0`
-    - `docker run -it --name users -dp 8071:8071 --network web-app webusers:1`
-    - `docker exec -it users /bin/bash`
-    - `rebar3 compile && rebar3 shell`
-    - `server:server().`
+    ~~~bash
+    docker image build -t webusers:1 -f Dockerfile.webusers https://github.com/salvasser/Erlang.git#main
+    ~~~
+    ~~~bash
+    docker network create web-app
+    ~~~
+    ~~~bash
+    docker run -d --network web-app --network-alias db -e MYSQL_ROOT_PASSWORD=123456 -e MYSQL_DATABASE=erlang mysql:8.0
+    ~~~
+    ~~~bash
+    docker run -it --name users -dp 8071:8071 --network web-app webusers:1
+    ~~~
+    ~~~bash
+    docker exec -it users /bin/bash
+    ~~~
+    ~~~bash
+    rebar3 compile && rebar3 shell
+    ~~~
+    ~~~erl
+    server:server().
+    ~~~
 ------------------------------------------------
 enter in the address bar of the browser
 ------------------------------------------------
