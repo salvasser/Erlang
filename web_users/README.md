@@ -18,7 +18,7 @@ to run the application, execute in the terminal:
     ~~~bash
     rebar3 compile && rebar3 shell
     ~~~
-    ~~~erl
+    ~~~bash
     server:server().
     ~~~
  2. Via docker network
@@ -40,7 +40,7 @@ to run the application, execute in the terminal:
     ~~~bash
     rebar3 compile && rebar3 shell
     ~~~
-    ~~~erl
+    ~~~bash
     server:server().
     ~~~
 ------------------------------------------------
@@ -52,7 +52,9 @@ enter in the address bar of the browser
 if you run the program again, then execute in virtual machine erlang container:
 ------------------------------------------------
 
-	server:clear_data().
+   ~~~bash
+   server:clear_data().
+   ~~~
 	
 then restart the erlang virtual machine.
 ------------------------------------------------
