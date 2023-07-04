@@ -9,10 +9,18 @@ to run the application, execute in the terminal:
 ------------------------------------------------ 
 ### there are two options:
  1. Via docker compose
-    - `docker-compose up -d`
-    - `docker exec -it erl /bin/bash`
-    - `rebar3 compile && rebar3 shell`
-    - `server:server().`
+    ~~~bash
+    docker-compose up -d
+    ~~~
+    ~~~bash
+    docker exec -it erl /bin/bash
+    ~~~
+    ~~~bash
+    rebar3 compile && rebar3 shell
+    ~~~
+    ~~~bash
+    server:server().
+    ~~~
  2. Via docker network
     - `docker image build -t webusers:1 -f Dockerfile.webusers https://github.com/salvasser/Erlang.git#main`
     - `docker network create web-app`
