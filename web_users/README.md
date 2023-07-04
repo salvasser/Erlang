@@ -18,7 +18,7 @@ to run the application, execute in the terminal:
     ~~~bash
     rebar3 compile && rebar3 shell
     ~~~
-    ~~~bash
+    ~~~erl
     server:server().
     ~~~
  2. Via docker network
